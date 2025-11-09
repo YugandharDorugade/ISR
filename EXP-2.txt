@@ -1,0 +1,138 @@
+EXPERIMENT 2 — Single Pass Algorithm for Clustering
+🧠 Aim
+To implement the Single Pass Algorithm for clustering documents.
+
+🎯 Objectives
+Understand the concept of clustering in Information Retrieval (IR).
+Learn how single pass (online) clustering works.
+Analyze the effect of similarity thresholds on the number and quality of clusters.
+
+🧩 Core Theory
+1️⃣ What is Clustering?
+Clustering = grouping similar objects (or documents) together so that:
+Within-cluster similarity is high (documents inside a cluster are similar),
+Between-cluster similarity is low (documents from different clusters are dissimilar).
+Used in IR for:
+Document organization
+Topic grouping
+Improving search results
+
+2️⃣ Cluster Hypothesis
+“Documents that are similar to each other tend to be relevant to the same information need.”
+
+📘 Example:
+If you search “machine learning”, documents discussing “neural networks”, “deep learning”, and “supervised learning” are likely to belong to the same cluster.
+
+3️⃣ Types of Clustering
+Type						Description
+Hierarchical				Creates a tree of clusters (agglomerative/divisive).
+Partitional					Divides data into fixed number of clusters (e.g., k-means).
+Single Pass (Incremental)		Processes each document one by one; forms or updates clusters immediately.
+
+4️⃣ Single Pass Algorithm (also called Online or Incremental Clustering)
+Main Idea:
+Documents are processed sequentially — each new document is either assigned to an existing cluster or starts a new one.
+
+🧾 Steps of the Algorithm
+Input: Minimum five conflated files (documents already processed by conflation algorithm).
+Initialize: Create first cluster and make the first document its representative (centroid).
+For each next document:
+	Compute similarity (e.g., using Dice coefficient) with each existing cluster representative.
+	If similarity ≥ threshold, assign it to that cluster.
+	Else, create a new cluster with that document as representative.
+Recompute representative: When a document joins a cluster, update the cluster’s representative.
+Continue until all documents are processed.
+
+📘 Output:
+List of clusters with their member documents.
+
+5️⃣ Important Terms
+Term						Explanation
+Cluster Representative / Centroid	A summary of all objects in the cluster (like an average vector).
+Matching Function				Measures similarity between document and centroid (e.g., Dice, Cosine).
+Threshold (T)					Minimum similarity required to join a cluster. Higher T = more clusters. Lower T = fewer clusters.
+
+6️⃣ Example
+Let’s say we have 3 document vectors (simplified):
+D1: [1, 0, 1, 0]
+D2: [1, 1, 0, 0]
+D3: [0, 1, 1, 0]
+Threshold = 0.5
+D1 forms Cluster 1.
+D2 → similarity(D1,D2)=0.5 → joins Cluster 1.
+D3 → similarity with Cluster 1 < 0.5 → forms new Cluster 2.
+So final:
+Cluster 1: D1, D2
+Cluster 2: D3
+
+7️⃣ Dice Coefficient (Similarity Measure)
+Used to measure overlap between two sets (or word lists).
+Dice(A,B)=∣A∣+∣B∣ / 2∣A∩B∣
+	​
+Ranges between 0 and 1:
+1 → identical documents
+0 → completely different
+
+⚙️ Pseudocode (Simplified)
+# Input: List of documents with keywords
+docs = [
+    {"ai", "ml", "data"},
+    {"machine", "learning", "data"},
+    {"dog", "cat", "animal"}
+]
+
+clusters = []
+threshold = 0.5
+
+def dice(a, b):
+    return 2 * len(a & b) / (len(a) + len(b))
+
+for doc in docs:
+    added = False
+    for cluster in clusters:
+        sim = dice(doc, cluster["rep"])
+        if sim >= threshold:
+            cluster["docs"].append(doc)
+            # recompute representative
+            cluster["rep"] = set().union(*cluster["docs"])
+            added = True
+            break
+    if not added:
+        clusters.append({"rep": doc, "docs": [doc]})
+
+for i, c in enumerate(clusters):
+    print(f"Cluster {i+1}:", c["docs"])
+
+💬 Short Answer Questions
+Q1. Explain clustering using dissimilarity matrix.
+Ans:
+A dissimilarity matrix stores pairwise distances (or 1 - similarity) between documents.
+Clustering is then performed by grouping documents with small dissimilarity values.
+The threshold controls whether documents are grouped or separated — higher threshold → more strict → more clusters.
+
+Q2. Explain K-list.
+Ans:
+K-list is a structure used in clustering to maintain k most similar documents for each document.
+It helps in reducing computation time by comparing only top-k related documents instead of all pairs.
+
+Q3. Explain Cluster-based Retrieval.
+Ans:
+In cluster-based retrieval, instead of searching all documents individually, the query is first matched to cluster representatives.
+Then, only documents inside the most relevant clusters are searched — saving time and improving relevance.
+
+Q4. Working of Rocchio’s Algorithm.
+Ans:
+Rocchio’s algorithm is a relevance feedback method that updates a user’s query vector based on relevant and non-relevant documents.
+Where
+R: relevant docs, 
+N: non-relevant docs
+α, β, γ are tuning parameters
+
+It shifts the query vector toward relevant documents and away from irrelevant ones.
+
+🎤 Viva Questions (With Short Answers)
+No.	Question				Short Answer
+1	Cluster using similarity measures	Similarity measures (like Dice, Cosine, Jaccard) decide which documents go into same cluster.
+2	IR Models				Boolean, Vector Space, and Probabilistic models.
+3	Boolean Search				Uses logical operators (AND, OR, NOT) to filter documents matching query exactly.
+4	What is Multi-pass Clustering?		Unlike single-pass, multi-pass clustering revisits and refines clusters iteratively for better accuracy.

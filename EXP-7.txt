@@ -1,0 +1,151 @@
+EXPERIMENT 7 — Web Crawler
+🧠 Aim
+To implement a Web Crawler that automatically fetches data (like links or product information) from web pages.
+
+🎯 Objective
+To understand how search engines collect and index web data.
+To learn about the architecture and working of a web crawler (spider).
+To implement a basic web crawler using Python.
+To study Robot Exclusion Protocol (robots.txt) for ethical crawling.
+
+🧩 1️⃣ What is a Web Crawler?
+A web crawler (also called spider or bot) is a program that:
+Automatically navigates through websites,
+Downloads web pages,
+Extracts useful data or links,
+And stores them for indexing or analysis.
+🕷️ Example: Googlebot, Bingbot, and Yahoo Slurp.
+
+🌐 2️⃣ Why Do We Need Crawlers?
+Because the web has billions of pages — impossible to process manually.
+Crawlers discover, update, and maintain data for:
+Search engines (indexing & ranking)
+Price comparison tools
+News aggregators
+Data analysis, machine learning datasets
+
+🧱 3️⃣ Architecture of a Web Crawler
+              +------------------+
+              |     SEED URLS    |
+              +------------------+
+                       |
+                       v
+              +------------------+
+              |     CRAWLER      |   --> Fetches HTML content
+              +------------------+
+                       |
+                       v
+              +------------------+
+              |   PARSER (HTML)  |   --> Extracts links, titles, data
+              +------------------+
+                       |
+                       v
+              +------------------+
+              |   URL FILTER     |   --> Removes duplicates, blocked URLs
+              +------------------+
+                       |
+                       v
+              +------------------+
+              |   URL QUEUE      |   --> Stores next URLs to visit
+              +------------------+
+                       |
+                       v
+              +------------------+
+              |     INDEXER      |   --> Adds pages to database
+              +------------------+
+
+⚙️ 4️⃣ Steps in Web Crawling
+Step		Description
+1		Start with a seed URL (entry point).
+2		Fetch HTML of the page using HTTP request.
+3		Parse the page — extract links using tags (<a href="...">).
+4	Filter: discard duplicates, unwanted domains, or disallowed pages.
+5	Queue new URLs for crawling.
+6	Repeat until limit or depth reached.
+
+📜 5️⃣ Robots.txt — Robot Exclusion Protocol
+Every website may include a robots.txt file in its root folder, e.g.:
+https://www.flipkart.com/robots.txt
+This file tells crawlers which parts of the website are allowed or disallowed for crawling.
+Example:
+User-agent: *
+Disallow: /cart/
+Disallow: /account/
+Allow: /
+
+✅ Ethical crawlers must respect this rule.
+Violating it can lead to IP bans or legal consequences.
+
+🧮 6️⃣ Algorithm
+Algorithm: Simple Web Crawler
+1. Input: Seed URL, maximum depth
+2. Initialize queue with the seed URL
+3. While queue is not empty and depth not exceeded:
+    a. Pop next URL
+    b. Download HTML content
+    c. Parse HTML to extract hyperlinks
+    d. Add unseen links to queue
+    e. Store content or URLs in a file
+4. End
+
+💻 7️⃣ Python Implementation Example
+Here’s a simple crawler using requests and BeautifulSoup:
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+
+# Step 1: Seed URL
+url = "https://example.com"
+visited = set()
+
+def crawl(link):
+    try:
+        html = requests.get(link, timeout=5).text
+        soup = BeautifulSoup(html, "html.parser")
+        print("\nCrawling:", link)
+        visited.add(link)
+
+        # Step 2: Extract all hyperlinks
+        for a in soup.find_all("a", href=True):
+            new_link = urljoin(link, a['href'])
+            if new_link not in visited and "http" in new_link:
+                print("  -> Found link:", new_link)
+                visited.add(new_link)
+    except:
+        pass
+
+crawl(url)
+
+Explanation:
+requests.get() → fetches HTML.
+BeautifulSoup() → parses HTML and finds all <a> tags.
+urljoin() → handles relative URLs correctly.
+
+🧩 8️⃣ Applications of Web Crawlers
+Domain				Use
+Search Engines			Indexing and ranking webpages
+E-commerce			Product price comparison
+Academic Research		Collecting data from multiple sites
+Sentiment Analysis		Scraping tweets, reviews
+News Aggregators		Collecting news articles
+
+⚖️ 9️⃣ Advantages & Limitations
+Advantages				Limitations
+Automates data collection	High bandwidth usage
+Updates index regularly		May overload servers
+Enables large-scale analysis	Can violate robots.txt if not coded ethically
+Saves manual effort			Handles duplicates or broken links poorly
+
+----------------------QNA--------------------------------
+
+No.		Question											Answer
+1		What is a web crawler?								A program that automatically browses the web to collect and store information from web pages.
+2		What is the role of a crawler in a search engine?			To fetch and update pages that will later be indexed for quick search results.
+3		What is robots.txt?									A file that tells crawlers which pages or sections are allowed or disallowed for crawling.
+4		What happens if a crawler ignores robots.txt?				It can overload the server or violate privacy policies — considered unethical.
+5	What are the main components of a crawler?	URL queue, fetcher, parser, URL filter, and storage/indexer.
+6	Define depth in crawling.			The number of link levels the crawler follows from the seed URL.
+7	Why do we use BeautifulSoup in Python?		For parsing HTML/XML documents and extracting specific tags easily.
+8	How does a crawler avoid infinite loops?	By maintaining a visited URL set and checking duplicates before revisiting.
+9	Name some real-world crawlers.			Googlebot, Bingbot, Baiduspider, Yahoo Slurp.
+10	What is a site map (sitemap.xml)?		A file provided by the website to help crawlers discover all pages efficiently.

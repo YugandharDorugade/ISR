@@ -1,0 +1,128 @@
+EXPERIMENT 5 — F-Measure & E-Measure
+🧠 Aim
+To implement a program that calculates Harmonic Mean (F-Measure) and E-Measure for evaluating the performance of an Information Retrieval (IR) system.
+
+🎯 Objectives
+To understand how to combine Precision and Recall into a single evaluation metric.
+To study how E-measure allows adjusting importance between precision and recall.
+To learn practical evaluation methods used in modern IR systems (like search engines).
+
+🧩 Background Context
+In the previous experiment, we saw two metrics:
+Precision (P) → measures quality of retrieved documents.
+Recall (R) → measures completeness of retrieval.
+But using both separately can be confusing.
+→ For example: System A = (P=0.8, R=0.3), System B = (P=0.5, R=0.6).
+Which is better? 🤔
+
+To solve this, we use combined measures that capture both aspects at once.
+
+⚖️ 1️⃣ F-Measure (Harmonic Mean of Precision & Recall)
+Definition
+The F-measure (or F1-Score) is the harmonic mean of Precision and Recall:
+F = 2PR / P+R
+It gives a single number representing balance between precision and recall.
+Why Harmonic Mean (not Arithmetic)?
+Because the harmonic mean penalizes large differences —
+if either precision or recall is very low, F becomes low.
+
+Example:
+If P = 1.0 and R = 0.0 →
+F = 0.
+(You can’t have a good system if one of them is zero!)
+
+Interpretation
+Precision	Recall	F-Measure	Meaning
+1.0		1.0	1.0		Perfect system
+0.8		0.8	0.8		Balanced & good
+0.9		0.4	0.55		Imbalanced system
+0.4		0.9	0.55		Same F → equally poor balance
+F emphasizes both completeness and accuracy.
+
+Formula Variants
+Sometimes a weighted F-measure is used:	​
+β > 1 → more weight to recall
+β < 1 → more weight to precision
+
+Example:
+F₂ → recall is twice as important as precision.
+
+✅ F = 0.583 → System is moderately good, but can improve recall.
+
+Algorithm Steps
+Input precision and recall.
+Compute 
+F=2PR/(P+R).
+Display result.
+
+💻 Python-style Implementation
+# Input values
+precision = float(input("Enter Precision: "))
+recall = float(input("Enter Recall: "))
+
+# F-Measure formula
+f_measure = 2 * precision * recall / (precision + recall)
+
+print("F-Measure =", round(f_measure, 3))
+
+🧮 2️⃣ E-Measure (Van Rijsbergen’s Metric)
+
+The E-measure is a more flexible version of F, proposed by C. J. Van Rijsbergen.
+
+Definition
+Simplified relationship:
+For β = 1 → E = 1 − F
+So E acts as the complement of F when both are equally weighted.
+Role of β
+β > 1 → prioritize precision
+β < 1 → prioritize recall
+β = 1 → balance (equal weight)
+
+Interpretation Table
+β value	Focus				Relation to F
+β = 1	Equal weight			E = 1 – F
+β > 1	Precision more important	E depends more on 1/P
+β < 1	Recall more important		E depends more on 1/R
+⚙️ Example
+
+If
+P = 0.7, R = 0.5, β = 1
+F=0.583
+E=1−0.583=0.417
+
+✅ Interpretation: E represents the error rate (smaller E → better system).
+
+💻 Python-style Code
+# Input precision, recall, beta
+precision = 0.7
+recall = 0.5
+beta = 1
+
+# Calculate F
+F = 2 * precision * recall / (precision + recall)
+# Calculate E
+E = 1 - F if beta == 1 else None  # simplified for beta=1 case
+
+print("F-Measure =", round(F,3))
+print("E-Measure =", round(E,3))
+
+📊 Comparison Between Precision, Recall, F & E
+Metric	Focus	Ideal Value	Range	Interpretation
+Precision	Accuracy	High	0–1	% of retrieved docs that are relevant
+Recall	Completeness	High	0–1	% of relevant docs retrieved
+F-Measure	Balance	High	0–1	Harmonic mean of P & R
+E-Measure	Error measure	Low	0–1	Complement of F when β=1
+
+
+----------------------------------QNA-----------------------------------------
+
+1. F-Measure: It is the harmonic mean of precision and recall, balancing the two into a single metric.
+2. Harmonic vs Arithmetic Mean: The harmonic mean penalizes extreme differences between precision and
+recall, ensuring both must be high for a good score.
+3. in Fß (or E-measure): weights the importance of recall relative to precision (P > 1 favors recall, < 1
+favors precision).
+4. Relationship (F & E): E-measure is derived as E = 1 — F; hence, they are complementary.
+5. High F value: Indicates both precision and recall are high — good overall model performance.
+6. Low E value: Also indicates high precision and recall (since E = 1 — F).
+7. When precision or recall = O: F becomes O, as harmonic mean collapses to zero.
+8. Units of F and E: Both are dimensionless (unitless) and range between 0 and 1.

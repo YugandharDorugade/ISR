@@ -1,0 +1,119 @@
+EXPERIMENT 6 — Feature Extraction in 2D Color Images
+🧠 Aim
+To extract features (such as color, texture, shape, size, etc.) from a 2D color image, and visualize them using a histogram.
+
+🎯 Objective
+To understand what features mean in the context of images.
+To learn how images can be represented numerically for retrieval or classification.
+To implement basic feature extraction using Python and visualize them.
+
+🧩 Background Context
+Images are not directly comparable like text or numbers — we need to describe them using quantitative values.
+For example, a “red rose” and “red apple” share a color feature (red), but differ in shape and texture.
+So, before comparing or retrieving images, we convert them into feature vectors — a compact numerical representation.
+This process is called Feature Extraction.
+
+🔍 1️⃣ What are Features?
+Features are measurable properties that capture essential visual information about an image.
+Type	Description	Example
+Color features		Represent the color composition	Mean RGB, color histogram
+Texture features	Represent spatial arrangement of pixel intensities	Contrast, entropy, homogeneity
+Shape features		Represent object boundaries and geometry	Area, perimeter, aspect ratio
+Statistical features	Derived using math formulas	Mean, variance, standard deviation
+
+🧩 2️⃣ Feature Types Explained
+(a) Color Features
+Most basic and widely used.
+Represented using histograms of pixel intensities in RGB, HSV, or YCbCr color spaces.
+Easy to compute and rotation/scale independent.
+Example:
+An image dominated by red pixels will have a high count in the red channel histogram.
+
+(b) Texture Features
+Define surface properties like smoothness, roughness, or regularity.
+Extracted using GLCM (Gray Level Co-occurrence Matrix).
+Common texture features:
+
+(c) Shape Features
+Capture object outlines or boundaries.
+Typically derived from binary images after segmentation.
+Metrics: Area, Perimeter, Eccentricity, Aspect ratio.
+
+(d) Statistical Features
+Derived from pixel intensity distributions.
+	​
+🧮 3️⃣ Mathematical Representation (for Texture)
+The GLCM (Gray-Level Co-occurrence Matrix) is the most important method.
+It’s a matrix where element (i,j) represents how often a pixel with intensity i is adjacent to a pixel with intensity j.
+It depends on:
+Distance (d) between pixels
+Angle (θ): 0°, 45°, 90°, 135°
+From this, we derive features like contrast, energy, etc.
+
+⚙️ 4️⃣ Step-by-Step Implementation (Python)
+Let’s use cv2 (OpenCV), skimage.feature, and matplotlib.
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+from skimage.feature import greycomatrix, greycoprops
+
+# Step 1: Read image
+img = cv2.imread('flower.jpg')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Step 2: Plot color histogram
+plt.figure(figsize=(10,4))
+color = ('b','g','r')
+for i,col in enumerate(color):
+    hist = cv2.calcHist([img],[i],None,[256],[0,256])
+    plt.plot(hist, color = col)
+plt.title("Color Histogram")
+plt.xlabel("Pixel Intensity")
+plt.ylabel("Frequency")
+plt.show()
+
+# Step 3: Compute GLCM matrix (distance=1, angle=0)
+glcm = greycomatrix(gray, [1], [0], 256, symmetric=True, normed=True)
+
+# Step 4: Extract texture features
+contrast = greycoprops(glcm, 'contrast')[0,0]
+energy = greycoprops(glcm, 'energy')[0,0]
+homogeneity = greycoprops(glcm, 'homogeneity')[0,0]
+
+print("Contrast:", contrast)
+print("Energy:", energy)
+print("Homogeneity:", homogeneity)
+
+🧩 5️⃣ Observations
+After running this:
+You’ll see three overlapping histograms (B, G, R) representing pixel intensity distributions.
+The feature values (contrast, energy, etc.) will show how smooth or detailed the image is.
+
+Feature			Interpretation
+High energy		Smooth or plain image
+High contrast		Image has strong edges
+High entropy		Complex image
+High homogeneity	Uniform texture
+
+6️⃣ Applications
+Field								Use
+CBIR (Content-Based Image Retrieval)	Find visually similar images
+Medical Imaging					Classify tissue types
+Quality Inspection					Detect surface defects
+Biometrics						Face, fingerprint recognition
+Remote Sensing					Terrain and vegetation analysis
+
+
+----------------------------------------------------------------
+🎤 7️⃣ Viva Questions (With Detailed Answers)
+No.	Question	Answer
+1	What is feature extraction?	Process of converting raw image data into numerical descriptors (features) that represent important properties like color, texture, or shape.
+2	Why is feature extraction necessary?	Because raw images are high-dimensional and hard to compare directly. Features make similarity search and classification computationally efficient.
+3	What are color features?	Features that represent distribution of colors in the image, typically through histograms in RGB or HSV space.
+4	Define texture features.	Describe spatial arrangement of pixel intensities (patterns of smoothness or roughness) using statistical measures like contrast, entropy, energy.
+5	What is GLCM?	Gray-Level Co-occurrence Matrix — represents frequency of intensity pairs (i, j) in an image at a specific distance and direction.
+6	What are GLCM-based features?	Contrast, Energy, Homogeneity, Correlation, Entropy.
+7	Difference between energy and entropy.	Energy = uniformity (lower randomness), Entropy = randomness (higher disorder).
+8	What is a color histogram?	Graph showing frequency of pixel intensities for each color channel (R, G, B).
+9	What is shape feature extraction?	Describes geometric properties like object boundaries, area, and perimeter.
+10	Application of feature extraction?	Image classification, object detection, pattern recognition, CBIR.

@@ -1,0 +1,125 @@
+EXPERIMENT 4 — Precision and Recall
+🧠 Aim
+To implement a program to calculate Precision and Recall for a sample input —
+(given a query q1, its answer set A, and relevant documents Rq1).
+
+🎯 Objective
+To understand how to evaluate the performance of an Information Retrieval (IR) system.
+To learn how precision and recall quantify search effectiveness.
+
+🧩 Background Context
+When a user types a search query in an IR system (say “machine learning”),
+the system returns a list of documents.
+Some are relevant (useful to the query), some are non-relevant (noise).
+So, to measure how good the system is, we ask:
+Out of all documents retrieved → how many were actually useful? (Precision)
+Out of all useful documents in the database → how many were retrieved? (Recall)
+
+⚖️ The 4 Possible Categories of Documents
+When you run a query on a database, every document falls into one of these 4 groups:
+
+		Relevant		Not Relevant
+Retrieved	✅ True Positive (TP)	🚫 False Positive (FP)
+Not Retrieved	❌ False Negative (FN)	✅ True Negative (TN)
+We mostly focus on TP, FP, FN in IR.
+
+📘 Definitions
+Metric	Formula	Meaning
+Precision (P)	P = TP / (TP + FP)	Out of all retrieved documents, how many were relevant
+Recall (R)	R = TP / (TP + FN)	Out of all relevant documents, how many were retrieved
+
+So:
+Precision → Accuracy of the retrieved set
+Recall → Completeness of the retrieved set
+
+🔢 Numerical Example
+Suppose:
+Total database = 100 docs
+Relevant docs = 20
+IR system retrieves 10 docs
+Out of those 10, only 6 are relevant
+So:
+TP = 6 (relevant & retrieved)
+FP = 4 (retrieved but irrelevant)
+FN = 14 (relevant but not retrieved)
+
+Precision= 6+4 / 6 = 0.6
+Recall=6+14 / 6 = 0.3
+✅ Precision = 60%
+✅ Recall = 30%
+→ System is precise but incomplete (retrieves good results, but misses many).
+
+🔁 Precision–Recall Trade-off
+If we make the search broader → recall ↑, precision ↓ (retrieve more docs, but many irrelevant).
+If we make it stricter → recall ↓, precision ↑ (retrieve only a few, all relevant).
+You can always get 100% recall by retrieving everything.
+You can always get 100% precision by retrieving just one perfect result.
+But you can’t get both simultaneously.
+Hence, a balance is needed.
+
+📉 Precision–Recall Curve
+When results are ranked (like in Google),
+we calculate precision and recall at each rank position and plot them.
+The better the algorithm → the curve stays toward the top right (high precision & high recall).
+
+⚙️ Algorithm Steps
+Input:
+Set of relevant documents (Rq1)
+Set of retrieved documents (A)
+
+Compute:
+Intersection of both sets → relevant & retrieved
+
+Calculate:
+Precision = |Rq1 ∩ A| / |A|
+Recall = |Rq1 ∩ A| / |Rq1|
+Display precision and recall.
+
+💻 Python-Style Pseudocode
+# Relevant documents for query q1
+Rq1 = {"D1", "D2", "D3", "D5", "D8"}
+# Retrieved documents (answer set)
+A   = {"D2", "D3", "D4", "D6", "D8"}
+
+# Intersection (relevant & retrieved)
+common = Rq1.intersection(A)
+
+precision = len(common) / len(A)
+recall = len(common) / len(Rq1)
+
+print("Relevant & Retrieved:", common)
+print("Precision =", round(precision, 2))
+print("Recall =", round(recall, 2))
+
+Output:
+Relevant & Retrieved: {'D2', 'D3', 'D8'}
+Precision = 0.6
+Recall = 0.6
+
+
+✅ So this IR system retrieved 60% of relevant docs, and 60% of retrieved docs were actually relevant.
+
+💬 Theory Summary
+Concept	Meaning
+Precision		Quality of retrieved documents
+Recall			Quantity of relevant documents retrieved
+TP (True Positive)	Docs both relevant and retrieved
+FP (False Positive)	Retrieved but not relevant
+FN (False Negative)	Relevant but not retrieved
+Trade-off		More recall → less precision (and vice versa)
+
+
+-------------------------QNA----------------------------
+
+1. Precision: The ratio of correctly predicted positive observations to the total predicted positives.
+Formula: Precision = TP / (TP + FP)
+2. Recall: The ratio of correctly predicted positive observations to all actual positives.
+Formula: Recall = TP / (TP + FN)
+3. When you increase recall: Precision usually decreases, as the model captures more positives but also more false positives.
+4. Ideal case for precision and recall: Both equal to 1 (100%), meaning perfect classification—no false positives or false negatives.
+5. Shape of the Precision–Recall curve: Typically a downward-sloping curve; precision decreases as recall increases.
+6. True Positive (TP): Correctly predicted positive case (model predicts positive, and it actually is positive).
+7. False Positive (FP): Incorrectly predicted positive case (model predicts positive, but it’s actually negative).
+8. Importance of precision and recall: They measure the model’s performance in imbalanced datasets and indicate the trade-off between false alarms and missed detections.
+9. 100% recall with low precision: Yes, possible—if the model predicts all samples as positive, it catches all true positives but also many false positives.
+10. When recall is unmeasurable: When there are no actual positive cases in the dataset (denominator = 0).

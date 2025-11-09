@@ -1,0 +1,133 @@
+EXPERIMENT 8 — Weather Report Using Python
+🧠 Aim
+To implement a Python program that retrieves live weather information (temperature, humidity, pressure, wind, etc.) for a given city using an API.
+
+🎯 Objectives
+To understand what APIs (Application Programming Interfaces) are and how they enable real-time data access.
+To learn how to fetch JSON data from a web server.
+To build a simple Python-based information retrieval system using live weather data.
+
+🧩 1️⃣ Background: What is an API?
+An API is a communication bridge between two software systems.
+It allows a program to request information from another service.
+The service sends back data in structured format (usually JSON).
+
+📘 Example:
+When you open a weather app, it calls an API like
+api.openweathermap.org to fetch live data for your city.
+
+⚙️ 2️⃣ OpenWeatherMap API
+We’ll use the OpenWeatherMap API — a free and popular weather service.
+Base URL:
+https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric
+Parameter	Meaning
+q		City name (e.g., Pune, Mumbai)
+appid		Your unique API key
+units		Metric → Celsius (optional)
+
+💡 3️⃣ How It Works
+User inputs city name.
+Python script sends an HTTP GET request to the weather API.
+API returns a JSON object containing all details.
+Script extracts and displays required fields.
+
+🧮 4️⃣ Data Format (Sample JSON Output)
+{
+  "coord": {"lon": 73.85, "lat": 18.52},
+  "weather": [{"description": "clear sky"}],
+  "main": {
+      "temp": 28.5,
+      "pressure": 1013,
+      "humidity": 64
+  },
+  "wind": {"speed": 2.1},
+  "name": "Pune"
+}
+
+We’ll extract:
+City name
+Temperature
+Humidity
+Pressure
+Weather description
+Wind speed
+
+💻 5️⃣ Python Code Implementation
+import requests  # Library to make web requests
+
+# Step 1: User input
+city = input("Enter city name: ")
+
+# Step 2: API details
+api_key = "YOUR_API_KEY_HERE"  # (You can get a free one from openweathermap.org)
+base_url = "https://api.openweathermap.org/data/2.5/weather"
+
+# Step 3: Make API call
+url = f"{base_url}?q={city}&appid={api_key}&units=metric"
+response = requests.get(url)
+data = response.json()  # Convert JSON to Python dictionary
+
+# Step 4: Extract and print data
+if data["cod"] == 200:
+    print(f"\nWeather Report for {data['name']}:")
+    print("Temperature:", data["main"]["temp"], "°C")
+    print("Humidity:", data["main"]["humidity"], "%")
+    print("Pressure:", data["main"]["pressure"], "hPa")
+    print("Wind Speed:", data["wind"]["speed"], "m/s")
+    print("Description:", data["weather"][0]["description"])
+else:
+    print("City not found or API error.")
+
+🧩 Output Example:
+Enter city name: Pune
+
+Weather Report for Pune:
+Temperature: 28.5 °C
+Humidity: 64 %
+Pressure: 1013 hPa
+Wind Speed: 2.1 m/s
+Description: clear sky
+✅ The program retrieves live, real-time data from the API and displays it neatly.
+
+🧱 6️⃣ How It Relates to IR (Information Retrieval)
+This experiment is actually a real-world IR application —
+Instead of retrieving documents, we’re retrieving structured data (weather info) based on a query (city name).
+
+IR Concept		Weather App Equivalent
+Query			City name entered by user
+Document collection	Global weather database
+Retrieval model		API request (HTTP GET)
+Result set		JSON data returned
+Output			Weather summary printed
+
+🧩 7️⃣ Error Handling (Optional Improvement)
+Add exception handling for bad inputs or network issues:
+
+try:
+    response = requests.get(url, timeout=5)
+    response.raise_for_status()
+    data = response.json()
+except Exception as e:
+    print("Error fetching data:", e)
+
+🧰 8️⃣ Applications
+Field						Example
+Weather forecasting apps	AccuWeather, Weather Channel
+Smart home automation		Adjusting AC/fan based on temperature
+Agriculture				Crop planning based on rainfall or humidity
+Travel apps				Suggesting destinations with pleasant weather
+Disaster management		Predicting storms, rainfall alerts
+
+
+--------------QNA-----------------------------------------
+No.		Question															Answer
+1		What is an API?													API (Application Programming Interface) is a software interface that allows communication between two applications.
+2		What type of API is OpenWeatherMap?									A REST API — it uses HTTP GET requests and returns JSON data.
+3	What is JSON?						    	JavaScript Object Notation — lightweight data format used for data exchange between client and server.
+4	Why use the requests library in Python?				To send HTTP requests and receive responses easily.
+5	What does the parameter units=metric do?			It displays temperature in Celsius instead of Kelvin.
+6	What happens if the city name is invalid?			API returns an error code (like 404), which can be handled in the program.
+7	What is appid in the URL?					Your unique API key used to authenticate requests.
+8	What is the significance of weather APIs in IR systems?		They demonstrate real-time data retrieval based on user queries — a form of information retrieval.
+9	Why is error handling important in API calls?			To manage issues like invalid URLs, bad responses, or network failures gracefully.
+10	Can APIs return data formats other than JSON?			Yes, many APIs also support XML or plain text, depending on user preference.

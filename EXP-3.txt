@@ -1,0 +1,128 @@
+EXPERIMENT 3 — Inverted File
+🧠 Aim
+To implement a program for retrieval of documents using inverted files.
+
+🎯 Objectives
+Understand how indexing improves the speed of document retrieval.
+Learn about inverted files, vocabulary, and occurrence lists.
+Implement a simple version of inverted index-based search.
+
+🧩 Core Theory
+1️⃣ What is Indexing?
+Indexing = creating a data structure that helps find relevant information quickly.
+Instead of searching every word in every file (sequential search), we build an index mapping each term to the documents that contain it.
+
+📘 Analogy:
+Think of a book index — you don’t read the entire book to find “photosynthesis”; you look it up in the index.
+
+2️⃣ Why Indexing is Needed
+Sequential (linear) search = slow (O(n)) for large text collections.
+Index = faster retrieval (logarithmic or constant time).
+Especially important for large, semi-static text databases (like Wikipedia, research archives).
+
+3️⃣ Inverted File Structure
+An inverted file (or inverted index) is the most common indexing technique used in IR systems.
+It has two main parts:
+Part					Description
+Vocabulary (Dictionary)	List of all unique words (terms) in the collection.
+Occurrences (Postings)	For each word, list of all documents (and positions) where it appears.
+📘 Example
+Let’s say we have 3 documents:
+Doc ID	Text
+D1	“This is a text”
+D2	“A text has words”
+D3	“Words are made from letters”
+
+After removing stop words and tokenizing:
+
+Term	Occurrences (Doc IDs)
+text	D1, D2
+words	D2, D3
+made	D3
+letters	D3
+This is the inverted index.
+
+4️⃣ Search Steps Using Inverted File
+When a user searches for “text words”, the process is:
+Vocabulary Search:
+Find the words “text” and “words” in the vocabulary.
+Retrieve Occurrences:
+“text” → {D1, D2}
+“words” → {D2, D3}
+Manipulate Occurrences:
+For AND query → intersection → D2
+For OR query → union → D1, D2, D3
+So, document D2 is most relevant for “text AND words”.
+
+5️⃣ Data Structures Used
+Hashing: for fast lookup (O(1))
+Trie / Tree: for prefix or range queries
+B-tree: for sorted access (lexicographic order)
+
+6️⃣ Algorithm (From Manual + Simplified)
+# Step 1: Input text documents (already conflated)
+docs = {
+    "D1": "this is a text",
+    "D2": "a text has words",
+    "D3": "words are made from letters"
+}
+
+# Step 2: Build inverted index
+index = {}
+for doc, text in docs.items():
+    for word in text.split():
+        if word not in index:
+            index[word] = set()
+        index[word].add(doc)
+
+# Step 3: Display index
+print("Inverted Index:")
+for term, occ in index.items():
+    print(term, "→", occ)
+
+# Step 4: Query search
+query = input("Enter query: ").split()
+results = [index.get(q, set()) for q in query]
+final = set.intersection(*results)
+print("Documents retrieved:", final)
+
+7️⃣ Variants / Related Concepts
+Concept					Description
+Signature Files				Store hashed signatures (bit strings) instead of explicit lists; saves space but may produce false positives.
+Suffix Arrays / Suffix Trees	Used for fast substring search (especially in DNA sequences, strings).
+Block Addressing			Instead of word positions, store block IDs for faster but coarser retrieval.
+
+8️⃣ Applications of Inverted Index
+Search engines (Google, Bing)
+Library catalog systems
+Text mining and natural language processing
+Database full-text search
+
+💬 Short Answer Questions
+Q1. Working of Inverted Files
+Ans:
+An inverted file maps each term (from the vocabulary) to a list of documents where it occurs (occurrence list).
+Searching is done by looking up the query term in the index and retrieving all associated documents.
+
+Q2. Applications of Inverted Index
+Ans:
+Used in:
+Search engines
+Document retrieval systems
+Content-based filtering
+Text mining
+
+Q3. Working of Signature Files
+Ans:
+Each document is represented by a bit string (signature).
+Each bit represents whether a term from a dictionary appears in the document.
+Query signatures are compared with document signatures using bitwise operations — faster but may produce false hits.
+
+🎤 Viva Questions (With Short Answers)
+No.	Question	Short Answer
+1	What is vocabulary and occurrences?	Vocabulary = list of unique terms; Occurrences = list of document IDs where each term appears.
+2	How is search carried out on inverted index?	By finding query terms in the vocabulary, fetching their occurrence lists, and combining them (AND/OR).
+3	How to index multimedia objects?	By extracting features (e.g., color histograms, shape descriptors, audio fingerprints) and indexing them like keywords.
+4	Limitations of inverted index?	High storage overhead, frequent updates are costly, unsuitable for dynamic databases.
+5	What is suffix array and suffix tree?	Both store suffixes of text for fast substring search; suffix tree is hierarchical, suffix array is space-efficient linear version.
+6	What is the concept of signature files?	Signature = bit string representation of document terms; used to speed up approximate search.
