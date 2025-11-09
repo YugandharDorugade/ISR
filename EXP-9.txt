@@ -1,0 +1,143 @@
+EXPERIMENT 9 — Recommender System (Case Study)
+🧠 Aim
+To study and understand the working of Recommender Systems through a case study — such as movie, product, music, or doctor recommendation.
+
+🎯 Objectives
+To understand how systems predict user preferences automatically.
+To study Collaborative Filtering, Content-Based Filtering, and Hybrid recommendation approaches.
+To analyze a simple example showing how recommendations are generated.
+
+🧩 1️⃣ What is a Recommender System?
+A Recommender System is an intelligent software tool that predicts what a user may like or prefer based on:
+Their past behavior (what they viewed, bought, rated),
+Or similar users’ preferences.
+📘 Example:
+Netflix → recommends movies.
+Amazon → recommends products.
+Spotify → recommends songs.
+YouTube → recommends videos.
+In short, it’s an Information Retrieval system that retrieves personalized information instead of documents.
+
+🧩 2️⃣ Types of Recommender Systems
+Type	Working Principle		Example
+1. Content-Based Filtering	Recommends items similar to what the user liked before, based on item features (genre, keywords, etc.)	Netflix showing movies similar to ones you watched
+2. Collaborative Filtering		Finds users similar to you and recommends what they liked	Amazon: “Users who bought this also bought…”
+3. Hybrid Approach	Combines both above methods to improve accuracy	Spotify, YouTube, LinkedIn
+
+🧩 3️⃣ Content-Based Filtering (CBF)
+Uses features of items (e.g., genre, description, author).
+The system builds a profile of the user’s interests.
+Then recommends new items with similar content.
+
+Example:
+Movie			Features			User Likes
+Inception			Sci-Fi, Thriller		✅
+Interstellar	Sci-Fi, Drama	✅
+Avengers	Action, Sci-Fi	✅
+La La Land	Romance, Drama	❌
+System learns user likes “Sci-Fi” → recommends “The Martian”, “Gravity”, etc.
+
+Techniques Used:
+TF-IDF vectors (for text-based features)
+Cosine similarity
+Cosine similarity formula:
+similarity (A,B) = ∣∣A∣∣×∣∣B∣∣ / A⋅B
+	​
+🧩 4️⃣ Collaborative Filtering (CF)
+Recommends items based on similar users instead of item features.
+Two types:
+User–User CF → “Find users like me.”
+Item–Item CF → “Find items liked by users who liked similar items.”
+User–User Example:
+
+User	Movie A	Movie B	Movie C	Movie D
+Alice	5	4	0	0
+Bob	5	0	4	0
+Carol	0	5	4	0
+→ Alice and Bob both rated A highly → Bob liked C → recommend C to Alice.
+
+Mathematical Approach:
+Represent ratings as a matrix.
+Compute similarity between users or items using:
+Cosine similarity
+Pearson correlation
+
+🧩 5️⃣ Hybrid Recommender System
+Combines CBF + CF for better results.
+System	Hybrid Approach
+Netflix	Combines movie content + user viewing patterns
+Spotify	Uses collaborative filtering + audio feature extraction
+Amazon	Mixes user behavior + product metadata
+
+Advantages:
+Reduces cold start problem.
+Gives more accurate and diverse results.
+
+⚙️ 6️⃣ Algorithmic Overview (Simple Logic)
+# Example: Simple content-based recommender using cosine similarity
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Step 1: Dataset
+movies = [
+    "Inception sci-fi thriller dream",
+    "Interstellar sci-fi space drama",
+    "Avengers action sci-fi heroes",
+    "La La Land romance drama music"
+]
+
+# Step 2: TF-IDF Vectorization
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(movies)
+
+# Step 3: Compute cosine similarity
+similarity = cosine_similarity(tfidf_matrix)
+
+# Step 4: Print similar movies
+movie_index = 0  # Inception
+print("Movies similar to:", movies[movie_index])
+for i in range(len(movies)):
+    if i != movie_index:
+        print(f"  {movies[i]} → Similarity: {round(similarity[movie_index][i], 2)}")
+
+
+Output Example:
+
+Movies similar to: Inception sci-fi thriller dream
+  Interstellar sci-fi space drama → Similarity: 0.58
+  Avengers action sci-fi heroes → Similarity: 0.41
+  La La Land romance drama music → Similarity: 0.02
+
+
+✅ System recommends Interstellar first — most similar to Inception.
+
+
+🧩 7️⃣ Real-World Applications
+Field			Application
+E-commerce	Product recommendations (Amazon, Flipkart)
+Entertainment	Movie/music suggestions (Netflix, Spotify)
+Healthcare	Doctor/drug recommendation systems
+Education		Course recommendation platforms
+Social Media	Friend and content recommendations
+
+
+⚖️ 8️⃣ Advantages & Limitations
+Advantages				Limitations
+Improves user experience	Cold start problem (new users/items)
+Increases engagement		Data sparsity (too many missing ratings)
+Supports personalization		Privacy and scalability issues
+Helps business conversions	Biased recommendations if data is limited
+
+-------------QNA--------------
+No.	Question												Answer
+1	What is a recommender system?							It’s an intelligent system that predicts user preferences and recommends items accordingly.
+2	What are the two main types?								Content-Based Filtering and Collaborative Filtering.
+3	Define Content-Based Filtering.							Recommends items based on similarity of features to items the user already liked.
+4	Define Collaborative Filtering.								Recommends items liked by similar users, based on user-item interactions.
+5	What is the cold start problem?							Difficulty in making recommendations for new users or new items with no data.
+6	What is cosine similarity used for?							To measure how similar two vectors (items or users) are, based on their feature representation.
+7	What is a hybrid recommender system?						A system that combines collaborative and content-based methods for higher accuracy.
+8	What are real-world examples of recommender systems?		Netflix, YouTube, Amazon, Spotify, Flipkart.
+9	What is the role of machine learning in recommender systems?	ML models learn patterns from past data to predict user preferences.
+10	Why are recommender systems important?					They personalize the user experience, increase engagement, and improve sales or retention.

@@ -1,0 +1,89 @@
+1️⃣ What is Information Retrieval (IR)?
+IR is the process of finding relevant information or documents from a large collection based on a user’s query.
+
+2️⃣ What is an index in IR systems?
+An index is a data structure that maps terms to document locations for faster searching, like a book index.
+
+3️⃣ What is an Inverted Index?
+It stores each term along with a list of documents where it appears — enabling fast keyword-based retrieval.
+
+4️⃣ What is a Vocabulary and Posting List?
+Vocabulary = unique words; Posting list = document IDs where those words occur.
+
+5️⃣ What is the purpose of text preprocessing in IR?
+To clean and normalize text (remove stop words, stemming, case-folding) before indexing or retrieval.
+
+6️⃣ What is stemming or conflation?
+It reduces words to their root form, e.g., “playing”, “played” → “play”, to handle word variations uniformly.
+
+7️⃣ What is Single Pass Clustering (SPC)?
+A fast document clustering algorithm that assigns each document to the most similar cluster in a single scan.
+
+8️⃣ What is the advantage of SPC?
+It’s efficient for large data and does not require reprocessing like k-means — works in one pass.
+
+9️⃣ Define Precision.
+Precision = relevant retrieved / total retrieved → measures accuracy of the retrieved results.
+
+10️⃣ Define Recall.
+Recall = relevant retrieved / total relevant → measures completeness of retrieval.
+
+11️⃣ What is the trade-off between Precision and Recall?
+Increasing recall usually lowers precision — a good IR system balances both.
+
+12️⃣ Define F-Measure.
+It is the harmonic mean of Precision and Recall, giving a single score for IR performance.
+
+13️⃣ Define E-Measure.
+An error-based measure; for β=1, E = 1 – F, showing the complement of the F-score.
+
+14️⃣ What is the role of β in Fβ or Eβ?
+β controls whether recall (β>1) or precision (β<1) is given more importance.
+
+15️⃣ What is feature extraction in images?
+It converts visual information into numeric features like color, texture, and shape for comparison.
+
+16️⃣ What is a color histogram?
+A graph showing frequency of pixel intensities for each color channel (R, G, B) in an image.
+
+17️⃣ What is a GLCM?
+Gray-Level Co-occurrence Matrix — represents how often pairs of pixel intensities occur together in an image.
+
+18️⃣ List common texture features derived from GLCM.
+Contrast, Energy, Entropy, Homogeneity, and Correlation.
+
+19️⃣ What is a web crawler?
+A program that automatically fetches and parses web pages to collect data or links for indexing.
+
+20️⃣ What is robots.txt?
+A website file that specifies which pages a crawler is allowed or disallowed to access.
+
+21️⃣ What are the main components of a web crawler?
+Seed URL, Fetcher, Parser, URL Queue, and Indexer.
+
+22️⃣ What is an API?
+API (Application Programming Interface) is a service that allows communication and data exchange between systems.
+
+23️⃣ What is OpenWeatherMap API used for?
+To retrieve real-time weather data (temperature, humidity, wind, etc.) in JSON format.
+
+24️⃣ What is JSON?
+JavaScript Object Notation — a lightweight, human-readable format for exchanging structured data.
+
+25️⃣ What is a Recommender System?
+A system that predicts user preferences and suggests items like movies, products, or songs.
+
+26️⃣ What are the types of Recommender Systems?
+Content-Based, Collaborative Filtering, and Hybrid.
+
+27️⃣ What is Content-Based Filtering?
+Recommends items similar to those the user liked, based on item features (e.g., genre, keywords).
+
+28️⃣ What is Collaborative Filtering?
+Recommends items liked by users with similar tastes — based on user–item interactions.
+
+29️⃣ What is the cold start problem?
+The difficulty in recommending new items or for new users with insufficient data.
+
+30️⃣ Give some real-life examples of recommender systems.
+Netflix (movies), Amazon (products), Spotify (songs), YouTube (videos), Flipkart (shopping).
